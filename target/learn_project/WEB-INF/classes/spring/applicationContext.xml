@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--jdbc链接库信息-->
+    <!--<context:property-placeholder location="classpath:/jdbc.properties"/>-->
+    <!--排除controller包扫描，在springMVC中再扫描-->
+    <context:component-scan base-package="com">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    
+    <!--aop-->
+    <aop:aspectj-autoproxy />
+
+    <bean id="centerdb" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+        <property name="url" value="jdbc:sqlserver://localhost:1433;DatabaseName=strutssshlearn" />
+        <property name="username" value="sa" />
+        <property name="password" value="123456" />
+        <property name="initialSize" value="5" />
+        <property name="minIdle" value="5" />
+        <property name="maxActive" value="80" />
+        <property name="maxWait" value="60000" />
+        <property name="removeAbandoned" value="false" />
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="false" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="60000" />
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="filters" value="stat" />
+    </bean>
+
+    <!--在spring中配置hibernate SessionFactory-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="centerdb"/>
+        <property name="configLocation" value="classpath:hibernate/hibernate.cfg.xml"/>
+        <property name="packagesToScan">
+            <list>
+                <value>com.learn.model</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--事务管理-->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" propagation="REQUIRED"/>
+            <tx:method name="list*" read-only="true" propagation="REQUIRED"/>
+            <tx:method name="find*" read-only="true" propagation="REQUIRED"/>
+            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config proxy-target-class="true">
+        <aop:advisor pointcut="execution(public * com.learn.service.*Serivce.*(..))" advice-ref="txAdvice"/>
+    </aop:config>
+</beans>
