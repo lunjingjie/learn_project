@@ -1,6 +1,7 @@
 package com.learn.dao;
 
 import com.learn.model.UserModel;
+import com.learn.vo.UserVo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,10 @@ public class UserDao {
         return sessionFactory.getCurrentSession();
     }
 
-    public void saveUser(UserModel user) {
+    public void saveUser(UserVo user) {
         this.getSession().save(user);
     }
 
-    @SuppressWarnings("unchecked")
     public List<UserModel> getUser() {
         return this.getSession().createCriteria(UserModel.class).list();
     }

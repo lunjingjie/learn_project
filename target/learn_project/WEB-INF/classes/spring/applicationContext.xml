@@ -11,7 +11,7 @@
     <context:component-scan base-package="com">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-    
+
     <!--aop-->
     <aop:aspectj-autoproxy />
 
@@ -54,6 +54,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <!--配置事务增强处理Bean-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="get*" read-only="true" propagation="REQUIRED"/>
@@ -63,6 +64,7 @@
         </tx:attributes>
     </tx:advice>
 
+    <!--配置自动事务代理-->
     <aop:config proxy-target-class="true">
         <aop:advisor pointcut="execution(public * com.learn.service.*Serivce.*(..))" advice-ref="txAdvice"/>
     </aop:config>
