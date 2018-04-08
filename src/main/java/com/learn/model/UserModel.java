@@ -3,7 +3,7 @@ package com.learn.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user", schema = "dbo", catalog = "strutssshlearn")
+@Table(name = "user", schema = "strutssshlearn")
 public class UserModel {
     private int id;
     private String userName;

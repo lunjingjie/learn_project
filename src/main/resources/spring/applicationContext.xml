@@ -8,18 +8,21 @@
     <!--jdbc链接库信息-->
     <!--<context:property-placeholder location="classpath:/jdbc.properties"/>-->
     <!--排除controller包扫描，在springMVC中再扫描-->
-    <context:component-scan base-package="com">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
+    <!--加载数据库信息配置文件-->
+    <context:property-placeholder location="classpath:db.properties" />
+    <!--配置c3p0连接池-->
+    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${db.driverClassName}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="user" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>-->
 
-    <!--aop-->
-    <aop:aspectj-autoproxy />
-
-    <bean id="centerdb" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-        <property name="url" value="jdbc:sqlserver://localhost:1433;DatabaseName=strutssshlearn" />
-        <property name="username" value="sa" />
-        <property name="password" value="123456" />
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driverClassName}" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.username}" />
+        <property name="password" value="${db.password}" />
         <property name="initialSize" value="5" />
         <property name="minIdle" value="5" />
         <property name="maxActive" value="80" />
@@ -38,7 +41,7 @@
 
     <!--在spring中配置hibernate SessionFactory-->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="centerdb"/>
+        <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:hibernate/hibernate.cfg.xml"/>
         <property name="packagesToScan">
             <list>
@@ -49,23 +52,27 @@
 
     <!--事务管理-->
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!--配置自动事务代理-->
+    <aop:config>
+        <aop:pointcut id="transactionPointCut" expression="execution(* com.learn.service..*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointCut" />
+    </aop:config>
 
     <!--配置事务增强处理Bean-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="get*" read-only="true" propagation="REQUIRED"/>
-            <tx:method name="list*" read-only="true" propagation="REQUIRED"/>
-            <tx:method name="find*" read-only="true" propagation="REQUIRED"/>
-            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="persist*" propagation="REQUIRED" />
+            <tx:method name="*" read-only="true" />
         </tx:attributes>
     </tx:advice>
 
-    <!--配置自动事务代理-->
-    <aop:config proxy-target-class="true">
-        <aop:advisor pointcut="execution(public * com.learn.service.*Serivce.*(..))" advice-ref="txAdvice"/>
-    </aop:config>
+    <context:component-scan base-package="com.learn.*" annotation-config="true"/>
 </beans>

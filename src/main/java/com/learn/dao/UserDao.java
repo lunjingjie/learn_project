@@ -19,7 +19,7 @@ public class UserDao {
         return sessionFactory.getCurrentSession();
     }
 
-    public void saveUser(UserVo user) {
+    public void saveUser(UserModel user) {
         this.getSession().save(user);
     }
 
@@ -32,8 +32,8 @@ public class UserDao {
                 .setParameter(0, id).uniqueResult();
     }
 
-    public void updateUser(UserModel user) {
-        this.getSession().update(user);
+    public void updateUser() {
+        this.getSession().createQuery("update UserModel set userName = 'abc' where id = 4").executeUpdate();
     }
 
     public void deleteUserById(int id) {

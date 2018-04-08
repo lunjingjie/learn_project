@@ -5,7 +5,6 @@ import com.learn.model.UserModel;
 import com.learn.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    public void saveUser(UserVo user) {
+    public void saveUser(UserModel user) {
         userDao.saveUser(user);
     }
 
@@ -27,12 +26,11 @@ public class UserService {
         return userDao.getUserById(id);
     }
 
-    public void updateUser(UserModel user) {
-        userDao.updateUser(user);
+    public void updateUser() {
+        userDao.updateUser();
     }
 
     public void deleteUserById(int id) {
         userDao.deleteUserById(id);
     }
-
 }
