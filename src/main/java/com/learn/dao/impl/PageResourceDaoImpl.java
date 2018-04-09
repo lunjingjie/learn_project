@@ -33,7 +33,7 @@ public class PageResourceDaoImpl implements PageResourceDao {
 
     @Override
     public ResourceTree getParentNode(Integer cId) {
-        String sql = "select resource_id as id,resource_name as resourceName,resource_path as resourcePath,pid from resource where pid=?";
+        String sql = "select resource_id as id,resource_name as resourceName,resource_path as resourcePath,pid from resource where resource_id=?";
         //Transformers.aliasToBean把结果通过setter方法注入到指定的对象属性中
         SQLQuery sq = (SQLQuery) getSession().createSQLQuery(sql).setParameter(0, cId).setResultTransformer(Transformers.aliasToBean(ResourceTree.class));
         sq.addScalar("id", StandardBasicTypes.INTEGER);
