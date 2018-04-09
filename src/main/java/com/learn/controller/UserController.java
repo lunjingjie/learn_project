@@ -1,5 +1,6 @@
 package com.learn.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.learn.model.UserModel;
 import com.learn.service.UserService;
 import com.learn.vo.MessageVo;
@@ -7,6 +8,7 @@ import com.learn.vo.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +28,15 @@ public class UserController {
 
     @GetMapping
     @ApiOperation(httpMethod = "GET", value = "查询所有用户角色", produces = MediaType.APPLICATION_JSON_VALUE)
+    @JsonView(UserVo.UserQueryView.class)
     public List<UserVo> loadAllUser() {
         List<UserModel> resList = userService.getUser();
         List<UserVo> userList = new ArrayList<UserVo>();
         for (UserModel user : resList) {
             UserVo userVo = new UserVo();
-            userVo.setId(user.getId());
             userVo.setUserName(user.getUserName());
+            userVo.setRoleId(user.getRoleByRoleId().getRoleId());
+            userVo.setUserId(user.getId());
             userList.add(userVo);
         }
         return userList;
@@ -42,10 +46,10 @@ public class UserController {
     @ApiOperation(httpMethod = "POST", value = "创建一个用户对象", produces = MediaType.APPLICATION_JSON_VALUE)
     public MessageVo createEditVo(UserVo userVo) {
         String username = userVo.getUserName();
-        String password = userVo.getUserPassword();
+        String password = DigestUtils.md5Hex(userVo.getUserPassword());
         UserModel user = new UserModel();
         user.setUserName(username);
-        user.setUserPassword(password);
+        user.setUserPassword(DigestUtils.md5Hex(password));
         userService.saveUser(user);
         messageVo.setResult("创建成功");
         return messageVo;

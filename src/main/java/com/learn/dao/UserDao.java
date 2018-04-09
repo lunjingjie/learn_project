@@ -33,7 +33,7 @@ public class UserDao {
     }
 
     public void updateUser() {
-        this.getSession().createQuery("update UserModel set userName = 'abc' where id = 4").executeUpdate();
+        this.getSession().createQuery("update UserModel set userName = 'tyyy' where id = 6").executeUpdate();
     }
 
     public void deleteUserById(int id) {

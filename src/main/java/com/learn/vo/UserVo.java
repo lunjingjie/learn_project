@@ -5,31 +5,46 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class UserVo {
 
-    public interface UserQueryView {};
+    public interface UserQueryView {
+    }
 
-    @ApiModelProperty("用户ID")
-    private int id;
+    ;
+
     @ApiModelProperty("用户名")
     private String userName;
     @ApiModelProperty("密码")
     private String userPassword;
+    @ApiModelProperty("权限ID")
+    private int roleId;
+    @ApiModelProperty("用户ID")
+    private int userId;
 
     public UserVo() {
     }
 
-    public UserVo(int id, String userName, String userPassword) {
-        this.id = id;
+    public UserVo(String userName, String userPassword, int roleId, int userId) {
         this.userName = userName;
         this.userPassword = userPassword;
+        this.roleId = roleId;
+        this.userId = userId;
     }
 
     @JsonView(UserQueryView.class)
-    public int getId() {
-        return id;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    @JsonView(UserQueryView.class)
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @JsonView(UserQueryView.class)
