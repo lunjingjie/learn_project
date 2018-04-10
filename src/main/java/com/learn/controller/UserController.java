@@ -17,22 +17,28 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * @author lunjingjie
+ */
 @RestController
 @RequestMapping("web/user")
 @Api(tags = "用户信息管理")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     private MessageVo messageVo = new MessageVo();
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     @ApiOperation(httpMethod = "GET", value = "查询所有用户角色", produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(UserVo.UserQueryView.class)
     public List<UserVo> loadAllUser() {
-        List<UserVo> resList = userService.getUser();
-        return resList;
+        return userService.getUser();
     }
 
     @PostMapping
@@ -75,10 +81,10 @@ public class UserController {
             RoleModel role = new RoleModel(userVo.getRoleId());
             user.setRoleByRoleId(role);
         }
-        if (userVo.getUserName() != "") {
+        if (!"".equals(userVo.getUserName())) {
             user.setUserName(userVo.getUserName());
         }
-        if (userVo.getUserPassword() != "") {
+        if (!"".equals(userVo.getUserPassword())) {
             user.setUserPassword(DigestUtils.md5Hex(userVo.getUserPassword()));
         }
         Timestamp now = new Timestamp(System.currentTimeMillis());
