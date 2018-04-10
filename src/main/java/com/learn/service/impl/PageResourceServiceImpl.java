@@ -8,26 +8,32 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author lunjingjie
+ */
 @Service
 public class PageResourceServiceImpl implements PageResourceService {
 
+    private final PageResourceDao pageResourceDao;
+
     @Autowired
-    private PageResourceDao pageResourceDao;
+    public PageResourceServiceImpl(PageResourceDao pageResourceDao) {
+        this.pageResourceDao = pageResourceDao;
+    }
 
     /**
-     * @param roleId
-     * @return
+     * @param roleId 权限Id
+     * @return ResourceTree
      */
     @Override
     public ResourceTree findResourceByRoleId(Integer roleId) {
-        ResourceTree resourceTree = createResourceTree(roleId, 1);
-        return resourceTree;
+        return createResourceTree(roleId, 1);
     }
 
-    public ResourceTree createResourceTree(Integer roleId, Integer cId) {
+    private ResourceTree createResourceTree(Integer roleId, Integer cId) {
         ResourceTree node = pageResourceDao.getParentNode(roleId, cId);
         List<ResourceTree> childs = pageResourceDao.getChildNode(roleId, cId);
-        for(ResourceTree tree : childs) {
+        for (ResourceTree tree : childs) {
             ResourceTree n = createResourceTree(roleId, tree.getId());
             node.getChildren().add(n);
         }
@@ -37,15 +43,14 @@ public class PageResourceServiceImpl implements PageResourceService {
     /**
      * 加载所有资源树
      *
-     * @return
+     * @return ResourceTree
      */
     @Override
     public ResourceTree loadAllResource() {
-        ResourceTree resourceTree = createResourceTree(1);
-        return resourceTree;
+        return createResourceTree(1);
     }
 
-    public ResourceTree createResourceTree(int cId) {
+    private ResourceTree createResourceTree(int cId) {
         ResourceTree node = pageResourceDao.getParentNode(cId);
         List<ResourceTree> childrenTreeNodes = pageResourceDao.getChildNode(cId);
         for (ResourceTree resourceTree : childrenTreeNodes) {

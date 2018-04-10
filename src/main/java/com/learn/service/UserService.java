@@ -1,36 +1,46 @@
 package com.learn.service;
 
-import com.learn.dao.UserDao;
 import com.learn.model.UserModel;
 import com.learn.vo.UserVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class UserService {
+/**
+ * @author lunjingjie
+ */
+public interface UserService {
 
-    @Autowired
-    private UserDao userDao;
+    /**
+     * 创建一个用户
+     * @param user user
+     */
+    void saveUser(UserModel user);
 
-    public void saveUser(UserModel user) {
-        userDao.saveUser(user);
-    }
+    /**
+     * 获取所有用户集合
+     * @return userVo集合
+     */
+    List<UserVo> getUser();
 
-    public List<UserVo> getUser() {
-        return userDao.getUser();
-    }
 
-    public UserModel getUserById(int id) {
-        return userDao.getUserById(id);
-    }
+    /**
+     * 根据id获取用户信息
+     * @param id id
+     * @return 一个用户信息
+     */
+    UserModel getUserById(int id);
 
-    public void updateUser(UserModel user) {
-        userDao.updateUser(user);
-    }
 
-    public void deleteUser(UserModel user) {
-        userDao.deleteUser(user);
-    }
+    /**
+     * 更新一个用户
+     * @param user user
+     */
+    void updateUser(UserModel user);
+
+
+    /**
+     * 软删除一个用户
+     * @param user user
+     */
+    void deleteUser(UserModel user);
 }
