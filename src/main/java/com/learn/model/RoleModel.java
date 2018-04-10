@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 
 @Entity
-@Table(name = "role", schema = "strutssshlearn", catalog = "")
+@Table(name = "role", schema = "strutssshlearn")
 public class RoleModel {
     private int roleId;
     private String roleName;
@@ -15,6 +15,24 @@ public class RoleModel {
     private String isDeleted;
     private Collection<RoleResourceModel> roleResourcesByRoleId;
     private Collection<UserModel> usersByRoleId;
+
+    public RoleModel() {
+    }
+
+    public RoleModel(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public RoleModel(int roleId, String roleName, String roleDesc, Timestamp insertTime, Timestamp updateTime, String isDeleted, Collection<RoleResourceModel> roleResourcesByRoleId, Collection<UserModel> usersByRoleId) {
+        this.roleId = roleId;
+        this.roleName = roleName;
+        this.roleDesc = roleDesc;
+        this.insertTime = insertTime;
+        this.updateTime = updateTime;
+        this.isDeleted = isDeleted;
+        this.roleResourcesByRoleId = roleResourcesByRoleId;
+        this.usersByRoleId = usersByRoleId;
+    }
 
     @Id
     @Column(name = "role_id")
@@ -92,33 +110,5 @@ public class RoleModel {
 
     public void setUsersByRoleId(Collection<UserModel> usersByRoleId) {
         this.usersByRoleId = usersByRoleId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RoleModel roleModel = (RoleModel) o;
-
-        if (roleId != roleModel.roleId) return false;
-        if (roleName != null ? !roleName.equals(roleModel.roleName) : roleModel.roleName != null) return false;
-        if (roleDesc != null ? !roleDesc.equals(roleModel.roleDesc) : roleModel.roleDesc != null) return false;
-        if (insertTime != null ? !insertTime.equals(roleModel.insertTime) : roleModel.insertTime != null) return false;
-        if (updateTime != null ? !updateTime.equals(roleModel.updateTime) : roleModel.updateTime != null) return false;
-        if (isDeleted != null ? !isDeleted.equals(roleModel.isDeleted) : roleModel.isDeleted != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = roleId;
-        result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
-        result = 31 * result + (roleDesc != null ? roleDesc.hashCode() : 0);
-        result = 31 * result + (insertTime != null ? insertTime.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
-        return result;
     }
 }

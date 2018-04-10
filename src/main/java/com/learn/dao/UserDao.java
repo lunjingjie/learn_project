@@ -2,8 +2,11 @@ package com.learn.dao;
 
 import com.learn.model.UserModel;
 import com.learn.vo.UserVo;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,8 +26,14 @@ public class UserDao {
         this.getSession().save(user);
     }
 
-    public List<UserModel> getUser() {
-        return this.getSession().createCriteria(UserModel.class).list();
+    public List<UserVo> getUser() {
+        String sql = "select id as userId, userName, userPassword, role_id as roleId from user where isDeleted = 'N'";
+        SQLQuery sq = (SQLQuery) getSession().createSQLQuery(sql).setResultTransformer(Transformers.aliasToBean(UserVo.class));
+        sq.addScalar("userId", StandardBasicTypes.INTEGER);
+        sq.addScalar("userName", StandardBasicTypes.STRING);
+        sq.addScalar("userPassword", StandardBasicTypes.STRING);
+        sq.addScalar("roleId", StandardBasicTypes.INTEGER);
+        return sq.list();
     }
 
     public UserModel getUserById(int id) {
@@ -32,12 +41,11 @@ public class UserDao {
                 .setParameter(0, id).uniqueResult();
     }
 
-    public void updateUser() {
-        this.getSession().createQuery("update UserModel set userName = 'tyyy' where id = 6").executeUpdate();
+    public void updateUser(UserModel user) {
+        getSession().update(user);
     }
 
-    public void deleteUserById(int id) {
-        this.getSession().createQuery("delete UserModel where id = ?")
-                .setParameter(0, id).executeUpdate();
+    public void deleteUser(UserModel user) {
+        getSession().update(user);
     }
 }
