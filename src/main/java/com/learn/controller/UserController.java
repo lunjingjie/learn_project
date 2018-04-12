@@ -22,48 +22,49 @@ import java.util.List;
 @Api(tags = "用户信息管理")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    private MessageVo messageVo = new MessageVo();
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     @ApiOperation(httpMethod = "GET", value = "查询所有用户角色", produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(UserVo.UserQueryView.class)
-    public List<UserVo> loadAllUser() {
+    public MessageVo loadAllUser() {
         List<UserVo> resList = userService.getUser();
-        return resList;
+        return new MessageVo(200, "success", resList);
     }
 
     @PostMapping
     @ApiOperation(httpMethod = "POST", value = "创建一个用户对象", produces = MediaType.APPLICATION_JSON_VALUE)
     public MessageVo createEditVo(UserVo userVo) {
         String username = userVo.getUserName();
-        String password = DigestUtils.md5Hex(userVo.getUserPassword());
+        String password = userVo.getUserPassword();
         int roleId = userVo.getRoleId();
         UserModel user = new UserModel();
         RoleModel role = new RoleModel(roleId);
         user.setRoleByRoleId(role);
         user.setUserName(username);
-        user.setUserPassword(DigestUtils.md5Hex(password));
+        user.setUserPassword(password);
         Timestamp now = new Timestamp(System.currentTimeMillis());
         user.setInsertTime(now);
         user.setIsDeleted("N");
         userService.saveUser(user);
-        messageVo.setResult("创建成功");
-        return messageVo;
+        return new MessageVo(200, "创建成功");
     }
 
     @GetMapping("/{id}")
     @ApiOperation(httpMethod = "GET", value = "根据ID获取用户信息", produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(UserVo.UserQueryView.class)
-    public UserVo getUserById(@ApiParam("用户ID") @PathVariable int id) {
+    public MessageVo getUserById(@ApiParam("用户ID") @PathVariable int id) {
         UserModel userModel = userService.getUserById(id);
         UserVo userVo = new UserVo();
         userVo.setUserName(userModel.getUserName());
         userVo.setRoleId(userModel.getRoleByRoleId().getRoleId());
         userVo.setUserId(userModel.getId());
-        return userVo;
+        return new MessageVo(200, "success", userVo);
     }
 
     @PutMapping
@@ -84,8 +85,7 @@ public class UserController {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         user.setUpdateTime(now);
         userService.updateUser(user);
-        messageVo.setResult("更新成功");
-        return messageVo;
+        return new MessageVo(200, "更新成功");
     }
 
     @DeleteMapping("/{id}")
@@ -96,7 +96,6 @@ public class UserController {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         user.setUpdateTime(now);
         userService.deleteUser(user);
-        messageVo.setResult("删除成功");
-        return messageVo;
+        return new MessageVo(200, "删除成功");
     }
 }

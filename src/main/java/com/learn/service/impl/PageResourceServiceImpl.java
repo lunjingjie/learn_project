@@ -4,6 +4,7 @@ import com.learn.dao.PageResourceDao;
 import com.learn.service.PageResourceService;
 import com.learn.vo.ResourceTree;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

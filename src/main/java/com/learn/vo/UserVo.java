@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class UserVo {
 
     public interface UserQueryView {};
-    public interface UserCreateView {};
 
     @ApiModelProperty("用户名")
     private String userName;

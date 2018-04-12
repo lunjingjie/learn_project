@@ -75,7 +75,7 @@ public class UserModel {
     }
 
     @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     public RoleModel getRoleByRoleId() {
         return roleByRoleId;
     }

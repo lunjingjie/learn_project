@@ -61,4 +61,10 @@ public class UserDaoImpl implements UserDao {
     public void deleteUser(UserModel user) {
         getSession().update(user);
     }
+
+    @Override
+    public UserModel getUserByName(String username) {
+        return (UserModel) this.getSession().createQuery("from UserModel where userName = ?")
+                .setParameter(0, username).uniqueResult();
+    }
 }

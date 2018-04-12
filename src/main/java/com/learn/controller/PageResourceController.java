@@ -1,6 +1,7 @@
 package com.learn.controller;
 
 import com.learn.service.PageResourceService;
+import com.learn.vo.MessageVo;
 import com.learn.vo.ResourceTree;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,15 +22,15 @@ public class PageResourceController {
 
     @GetMapping
     @ApiOperation(httpMethod = "GET", value = "查询所有页面模块", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResourceTree loadAll() {
+    public MessageVo loadAll() {
         ResourceTree resourceTree = pageResourceService.loadAllResource();
-        return resourceTree;
+        return new MessageVo(200, "success", resourceTree);
     }
 
     @GetMapping("/{roleId}")
     @ApiOperation(httpMethod = "GET", value = "根据权限ID查询页面资源模块", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResourceTree loadPageReesourceByRoleId(@PathVariable Integer roleId) {
+    public MessageVo loadPageReesourceByRoleId(@PathVariable Integer roleId) {
         ResourceTree resourceTree = pageResourceService.findResourceByRoleId(roleId);
-        return resourceTree;
+        return new MessageVo(200, "success", resourceTree);
     }
 }

@@ -43,4 +43,6 @@ public interface UserService {
      * @param user user
      */
     void deleteUser(UserModel user);
+
+    UserModel getUserByName(String username);
 }

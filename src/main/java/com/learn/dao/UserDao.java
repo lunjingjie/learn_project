@@ -43,4 +43,12 @@ public interface UserDao {
      * @param user user
      */
     void deleteUser(UserModel user);
+
+
+    /**
+     * 根据username获取用户信息
+     * @param username
+     * @return
+     */
+    UserModel getUserByName(String username);
 }
