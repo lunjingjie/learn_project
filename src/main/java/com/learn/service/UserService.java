@@ -22,7 +22,6 @@ public interface UserService {
      */
     List<UserVo> getUser();
 
-
     /**
      * 根据id获取用户信息
      * @param id id
@@ -30,13 +29,11 @@ public interface UserService {
      */
     UserModel getUserById(int id);
 
-
     /**
      * 更新一个用户
      * @param user user
      */
     void updateUser(UserModel user);
-
 
     /**
      * 软删除一个用户
