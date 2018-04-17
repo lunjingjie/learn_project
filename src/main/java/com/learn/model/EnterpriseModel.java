@@ -32,16 +32,6 @@ public class EnterpriseModel {
     }
 
     @Basic
-    @Column(name = "mn")
-    public String getMn() {
-        return mn;
-    }
-
-    public void setMn(String mn) {
-        this.mn = mn;
-    }
-
-    @Basic
     @Column(name = "enterpridse_name")
     public String getEnterpridseName() {
         return enterpridseName;

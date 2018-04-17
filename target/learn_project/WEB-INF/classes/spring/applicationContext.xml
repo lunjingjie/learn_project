@@ -37,6 +37,7 @@
         <property name="testOnBorrow" value="false" />
         <property name="testOnReturn" value="false" />
         <property name="filters" value="stat" />
+
     </bean>
 
     <!--在spring中配置hibernate SessionFactory-->

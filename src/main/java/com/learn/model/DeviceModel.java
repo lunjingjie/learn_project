@@ -1,10 +1,11 @@
 package com.learn.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "device", schema = "strutssshlearn")
-public class DeviceModel {
+public class DeviceModel implements Serializable{
     private int id;
     private String deviceId;
     private String deviceName;
