@@ -31,10 +31,9 @@ public class UserController {
 
     @GetMapping
     @ApiOperation(httpMethod = "GET", value = "查询所有用户角色", produces = MediaType.APPLICATION_JSON_VALUE)
-    @JsonView(UserVo.UserQueryView.class)
     public MessageVo loadAllUser() {
         List<UserVo> resList = userService.getUser();
-        return new MessageVo(200, "success", resList);
+        return new MessageVo("200", "success", resList);
     }
 
     @PostMapping
@@ -52,19 +51,18 @@ public class UserController {
         user.setInsertTime(now);
         user.setIsDeleted("N");
         userService.saveUser(user);
-        return new MessageVo(200, "创建成功");
+        return new MessageVo("200", "创建成功");
     }
 
     @GetMapping("/{id}")
     @ApiOperation(httpMethod = "GET", value = "根据ID获取用户信息", produces = MediaType.APPLICATION_JSON_VALUE)
-    @JsonView(UserVo.UserQueryView.class)
     public MessageVo getUserById(@ApiParam("用户ID") @PathVariable int id) {
         UserModel userModel = userService.getUserById(id);
         UserVo userVo = new UserVo();
         userVo.setUserName(userModel.getUserName());
         userVo.setRoleId(userModel.getRoleByRoleId().getRoleId());
         userVo.setUserId(userModel.getId());
-        return new MessageVo(200, "success", userVo);
+        return new MessageVo("200", "success", userVo);
     }
 
     @PutMapping
@@ -85,7 +83,7 @@ public class UserController {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         user.setUpdateTime(now);
         userService.updateUser(user);
-        return new MessageVo(200, "更新成功");
+        return new MessageVo("200", "更新成功");
     }
 
     @DeleteMapping("/{id}")
@@ -96,6 +94,6 @@ public class UserController {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         user.setUpdateTime(now);
         userService.deleteUser(user);
-        return new MessageVo(200, "删除成功");
+        return new MessageVo("200", "删除成功");
     }
 }

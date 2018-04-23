@@ -2,7 +2,7 @@ package com.learn.vo;
 
 public class MessageVo {
 
-    private int code;
+    private String code;
 
     private String result;
 
@@ -12,22 +12,22 @@ public class MessageVo {
 
     }
 
-    public MessageVo(int code, String result) {
+    public MessageVo(String code, String result) {
         this.code = code;
         this.result = result;
     }
 
-    public MessageVo(int code, String result, Object data) {
+    public MessageVo(String code, String result, Object data) {
         this.code = code;
         this.result = result;
         this.data = data;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

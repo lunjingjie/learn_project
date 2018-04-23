@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author lunjingjie
+ */
 @RestController
 @RequestMapping("web/pageResource")
 @Api(tags="页面资源信息")
@@ -24,13 +27,13 @@ public class PageResourceController {
     @ApiOperation(httpMethod = "GET", value = "查询所有页面模块", produces = MediaType.APPLICATION_JSON_VALUE)
     public MessageVo loadAll() {
         ResourceTree resourceTree = pageResourceService.loadAllResource();
-        return new MessageVo(200, "success", resourceTree);
+        return new MessageVo("200", "success", resourceTree);
     }
 
     @GetMapping("/{roleId}")
     @ApiOperation(httpMethod = "GET", value = "根据权限ID查询页面资源模块", produces = MediaType.APPLICATION_JSON_VALUE)
     public MessageVo loadPageReesourceByRoleId(@PathVariable Integer roleId) {
         ResourceTree resourceTree = pageResourceService.findResourceByRoleId(roleId);
-        return new MessageVo(200, "success", resourceTree);
+        return new MessageVo("200", "success", resourceTree);
     }
 }

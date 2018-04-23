@@ -31,6 +31,6 @@ public class HistoryDataController {
     @ApiOperation(httpMethod = "GET", value = "查询历史数据", produces = MediaType.APPLICATION_JSON_VALUE)
     public MessageVo loadAllUser(@RequestParam String enterpriseCode, @RequestParam Timestamp startTime, @RequestParam Timestamp endTime) {
         List<HashMap<String, Object>> result = historyDataService.loadHistoryData(enterpriseCode, startTime, endTime);
-        return new MessageVo(200, "success", result);
+        return new MessageVo("200", "success", result);
     }
 }

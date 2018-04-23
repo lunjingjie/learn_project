@@ -41,5 +41,5 @@ public interface UserService {
      */
     void deleteUser(UserModel user);
 
-    UserModel getUserByName(String username);
+    UserModel getUserByName(String username, String password);
 }

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.*;
 
+/**
+ * @author lunjingjie
+ */
 @Service
 public class HistoryDataServiceImpl implements HistoryDataService {
 
@@ -25,12 +28,11 @@ public class HistoryDataServiceImpl implements HistoryDataService {
 
         // 结果集中单个map集合
         Map<String, List<HistoryModel>> resultMap = new TreeMap<String, List<HistoryModel>>();
-        for (Iterator<HistoryModel> it = historyDataList.iterator(); it.hasNext(); ) {
-            HistoryModel historyData = it.next();
+        for (HistoryModel historyData : historyDataList) {
             String datatime = historyData.getDatatime().toString();
 
             if (resultMap.containsKey(datatime)) {
-                List<HistoryModel> historydatas = (List<HistoryModel>) resultMap.get(datatime);
+                List<HistoryModel> historydatas = resultMap.get(datatime);
                 historydatas.add(historyData);
             } else {
                 List<HistoryModel> historydatas = new ArrayList<HistoryModel>();
@@ -39,25 +41,23 @@ public class HistoryDataServiceImpl implements HistoryDataService {
             }
         }
 
-        HashMap<String, Object> tempMap = null;
+        HashMap<String, Object> tempMap;
         List<HashMap<String, Object>> resultList = new ArrayList<HashMap<String, Object>>();
-        for (Iterator<String> i = resultMap.keySet().iterator(); i.hasNext(); ) {
+        for (String s : resultMap.keySet()) {
             tempMap = new HashMap<String, Object>();
-            String datatime = i.next();
-            List<HistoryModel> historydatas = resultMap.get(datatime);
-            tempMap.put("Datatime", datatime);
+            List<HistoryModel> historydatas = resultMap.get(s);
+            tempMap.put("Datatime", s);
 
-            for (Iterator<HistoryModel> it2 = historydatas.iterator(); it2.hasNext(); ) {
-                HistoryModel historydata = it2.next();
+            for (HistoryModel historydata : historydatas) {
                 String deviceName = historydata.getDeviceName();
                 String unit = historydata.getDeviceByDeviceId().getDeviceUnit();
                 String key = deviceName;
-                if(unit != null && unit != "") {
+                if (unit != null && !"".equals(unit)) {
                     StringBuilder sb = new StringBuilder();
                     key = sb.append(deviceName).append("(").append(unit).append(")").toString();
                 }
                 String datavalue = historydata.getDataValue();
-                tempMap.put(key,datavalue);
+                tempMap.put(key, datavalue);
             }
             resultList.add(tempMap);
         }

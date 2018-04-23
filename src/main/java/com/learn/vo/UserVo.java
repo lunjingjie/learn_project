@@ -3,7 +3,9 @@ package com.learn.vo;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiModelProperty;
 
-public class UserVo {
+import java.io.Serializable;
+
+public class UserVo implements Serializable{
 
     public interface UserQueryView {};
 

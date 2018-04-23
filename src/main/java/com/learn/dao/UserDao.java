@@ -50,5 +50,5 @@ public interface UserDao {
      * @param username
      * @return
      */
-    UserModel getUserByName(String username);
+    UserModel getUserByName(String username, String password);
 }

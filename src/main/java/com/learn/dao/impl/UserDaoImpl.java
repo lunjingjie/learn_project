@@ -3,6 +3,7 @@ package com.learn.dao.impl;
 import com.learn.dao.UserDao;
 import com.learn.model.UserModel;
 import com.learn.vo.UserVo;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,7 +12,9 @@ import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lunjingjie
@@ -37,7 +40,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<UserVo> getUser() {
-        String sql = "select id as userId, userName, userPassword, role_id as roleId from user where isDeleted = 'N'";
+        String sql = "SELECT id AS userId, userName, userPassword, role_id AS roleId FROM user WHERE isDeleted = 'N'";
         SQLQuery sq = (SQLQuery) getSession().createSQLQuery(sql).setResultTransformer(Transformers.aliasToBean(UserVo.class));
         sq.addScalar("userId", StandardBasicTypes.INTEGER);
         sq.addScalar("userName", StandardBasicTypes.STRING);
@@ -63,8 +66,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserModel getUserByName(String username) {
-        return (UserModel) this.getSession().createQuery("from UserModel where userName = ?")
-                .setParameter(0, username).uniqueResult();
+    public UserModel getUserByName(String username, String password) {
+        return (UserModel) this.getSession().createQuery("from UserModel where userName = ? and userPassword = ?")
+                .setParameter(0, username)
+                .setParameter(1, password)
+                .uniqueResult();
     }
 }
