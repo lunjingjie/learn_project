@@ -10,7 +10,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -28,11 +27,10 @@ public class HmacFilter extends AccessControlFilter {
             String userPassword = servletRequest.getParameter("userPassword");
             String userName = servletRequest.getParameter("userName");
             UsernamePasswordToken token = new UsernamePasswordToken(userName, userPassword);
-            System.out.println(token);
             subject.login(token);
             return true;
         } catch (AuthenticationException e) {
-            setResponseParam((HttpServletResponse)servletResponse, Code.SYSTEM_ERROR);
+            setResponseParam((HttpServletResponse) servletResponse, Code.VALIDATE_ERROR);
             return false;
         }
     }

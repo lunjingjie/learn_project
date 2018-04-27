@@ -27,7 +27,11 @@ public class JwtFilter extends AccessControlFilter{
         String token = httpServletRequest.getHeader("authorization");
         // boolean access = TokenUtil.verifyIsContains(token);
         System.out.println(token);
-        boolean access = true;
+        boolean access = false;
+        // 解释token，验证token内信息是否正确
+        if (token != null) {
+            access = true;
+        }
         if(access == false){
             setResponseParam((HttpServletResponse)response, Code.UNAUTHORIZED);
         }

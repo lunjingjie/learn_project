@@ -44,7 +44,8 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-                /web/**=hmacFilter
+                /web/login=hmacFilter
+                /web/**=jwtFilter
             </value>
         </property>
     </bean>
