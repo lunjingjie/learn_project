@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("web/pageResource")
-@Api(tags="页面资源信息")
+@Api(tags = "页面资源信息")
 public class PageResourceController {
 
     @Autowired
@@ -36,4 +36,5 @@ public class PageResourceController {
         ResourceTree resourceTree = pageResourceService.findResourceByRoleId(roleId);
         return new MessageVo("200", "success", resourceTree);
     }
+
 }
